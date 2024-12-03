@@ -1,27 +1,13 @@
-cmake_minimum_required(VERSION 3.16)
-project(Project3 LANGUAGES CXX)
+cmake_minimum_required(VERSION 3.14)
+project(Project3v2)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-include(FetchContent)
-FetchContent_Declare(SFML
-        GIT_REPOSITORY https://github.com/SFML/SFML.git
-        GIT_TAG 2.6.x)
-FetchContent_MakeAvailable(SFML)
+set(SOURCE_FILES main.cpp
+)
+add_executable(HelloSFML ${SOURCE_FILES})
+include_directories(/usr/local/include)
 
-add_executable(Project3 main.cpp
-        Textures.h)
-
-target_link_libraries(Project3 PRIVATE sfml-graphics)
-target_compile_features(Project3 PRIVATE cxx_std_17)
-
-if(WIN32)
-    add_custom_command(
-            TARGET Project3
-            COMMENT "Copy OpenAL DLL"
-            PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${SFML_SOURCE_DIR}/extlibs/bin/$<IF:$<EQUAL:${CMAKE_SIZEOF_VOID_P},8>,x64,x86>/openal32.dll $<TARGET_FILE_DIR:Project3>
-            VERBATIM)
-endif()
-
-install(TARGETS Project3)
+find_package(SFML 2.5 COMPONENTS system window graphics network audio REQUIRED)
+include_directories(${SFML_INCLUDE_DIRS})
+target_link_libraries(HelloSFML sfml-system sfml-window sfml-graphics sfml-audio sfml-network)
