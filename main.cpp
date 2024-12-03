@@ -1,4 +1,5 @@
 #include <iostream>
+#include "Cells.h"
 #include <SFML/Graphics.hpp>
 using namespace std;
 
@@ -9,6 +10,8 @@ int main() {
     bool choiceMode = false;
     bool hashMode = false;
     bool trieMode = false;
+    SearchBoard search("../summer_wordsearch.txt");
+
     //textures
     sf::Texture titleTexture;
     titleTexture.loadFromFile("../images/title.png");
@@ -45,6 +48,19 @@ int main() {
     trie.setOrigin(trie.getGlobalBounds().width / 2.f, trie.getGlobalBounds().height / 2.f);
     trie.setPosition(width/2 + 100, height/2 + 100);
 
+    sf::Text test;
+    sf::Font font;
+    if (!font.loadFromFile("../font.ttf")){
+        cerr << "Error: Could not load font" << endl;
+    }
+    test.setString("a");
+    test.setFont(font);
+    test.setCharacterSize(50);
+    test.setFillColor(sf::Color::Blue);
+    test.setStyle(sf::Text::Bold);
+    setText(test, float(50), float(50));
+
+
     // welcome window
     sf::RenderWindow window(sf::VideoMode(width, height), "Word Search Solvinator");
     sf::Event event;
@@ -70,8 +86,6 @@ int main() {
                     game = true;
                     cout << "Gameplay using trie data structure" << endl;
                 }
-
-
             }
 
             window.clear(sf::Color::White);
@@ -84,13 +98,17 @@ int main() {
                 window.draw(hash);
                 window.draw(trie);
             }
-            else if(game && hashMode) {
-
+            else if(game) {
+                //window.draw(search.board[0][0]->character);
+                for (int i = 0; i < search.rows; i++) {
+                    for (int j = 0; j < search.cols; j++) {
+                       //window.draw(test);
+                       window.draw(search.board[i][j]->character); // figure out why no draw
+                    }
+                }
             }
 
-            else if(game && trieMode) {
 
-            }
 
             window.display();
         }

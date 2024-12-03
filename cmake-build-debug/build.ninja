@@ -57,6 +57,14 @@ build CMakeFiles/Project3v2.dir/main.cpp.obj: CXX_COMPILER__Project3v2_unscanned
   OBJECT_DIR = CMakeFiles\Project3v2.dir
   OBJECT_FILE_DIR = CMakeFiles\Project3v2.dir
 
+build CMakeFiles/Project3v2.dir/Trie.cpp.obj: CXX_COMPILER__Project3v2_unscanned_Debug C$:/Users/eliza/CLionProjects/COP3530/Project3v2/Trie.cpp || cmake_object_order_depends_target_Project3v2
+  DEFINES = -DSFML_STATIC
+  DEP_FILE = CMakeFiles\Project3v2.dir\Trie.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -IC:/Users/eliza/CLionProjects/COP3530/Project3v2/cmake-build-debug/_deps/sfml-src/include
+  OBJECT_DIR = CMakeFiles\Project3v2.dir
+  OBJECT_FILE_DIR = CMakeFiles\Project3v2.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Project3v2
@@ -65,7 +73,7 @@ build CMakeFiles/Project3v2.dir/main.cpp.obj: CXX_COMPILER__Project3v2_unscanned
 #############################################
 # Link the executable bin\Project3v2.exe
 
-build bin/Project3v2.exe: CXX_EXECUTABLE_LINKER__Project3v2_Debug CMakeFiles/Project3v2.dir/main.cpp.obj | _deps/sfml-build/lib/libsfml-graphics-s-d.a _deps/sfml-build/lib/libsfml-window-s-d.a _deps/sfml-build/lib/libsfml-system-s-d.a _deps/sfml-src/extlibs/libs-mingw/x64/libfreetype.a || _deps/sfml-build/lib/libsfml-graphics-s-d.a _deps/sfml-build/lib/libsfml-system-s-d.a _deps/sfml-build/lib/libsfml-window-s-d.a
+build bin/Project3v2.exe: CXX_EXECUTABLE_LINKER__Project3v2_Debug CMakeFiles/Project3v2.dir/main.cpp.obj CMakeFiles/Project3v2.dir/Trie.cpp.obj | _deps/sfml-build/lib/libsfml-graphics-s-d.a _deps/sfml-build/lib/libsfml-window-s-d.a _deps/sfml-build/lib/libsfml-system-s-d.a _deps/sfml-src/extlibs/libs-mingw/x64/libfreetype.a || _deps/sfml-build/lib/libsfml-graphics-s-d.a _deps/sfml-build/lib/libsfml-system-s-d.a _deps/sfml-build/lib/libsfml-window-s-d.a
   FLAGS = -g
   LINK_LIBRARIES = _deps/sfml-build/lib/libsfml-graphics-s-d.a  _deps/sfml-build/lib/libsfml-window-s-d.a  _deps/sfml-build/lib/libsfml-system-s-d.a  -lopengl32  -lwinmm  -lgdi32  _deps/sfml-src/extlibs/libs-mingw/x64/libfreetype.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\Project3v2.dir

@@ -10,7 +10,10 @@ FetchContent_Declare(SFML
         GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(Project3v2 main.cpp)
+add_executable(Project3v2 main.cpp
+        Trie.cpp
+        Trie.h
+        Cells.h)
 
 target_link_libraries(Project3v2 PRIVATE sfml-graphics)
 target_compile_features(Project3v2 PRIVATE cxx_std_17)
