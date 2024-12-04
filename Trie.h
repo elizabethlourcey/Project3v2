@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -18,14 +19,18 @@ class TrieTree{
     //trie class
 private:
     Node* root;
+    void deleteNodes(Node* curr);
 
 public:
     TrieTree();
     void insertWord(string word);
     bool searchWord(string word);
     Node* getRoot();
-    void buildDictionary(string bank);
-    void buildWordBank(string bank);
-    void traversal(Node* curr);
-    void findWords(string file);
+    void buildTrie(string bank);
+    vector<string> findWords(string file);
+    vector<string> searchHorizontal(string row);
+    vector<string> searchVertical(vector<string> block, int col);
+    ~TrieTree();
+
+
 };
