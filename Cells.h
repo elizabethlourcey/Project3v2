@@ -18,6 +18,7 @@ struct Cell {
     int colEnd = 0;
 
     bool clicked = false;
+    bool found = false;
 
     Cell() {
         value = ' ';
@@ -59,9 +60,7 @@ struct SearchBoard {
     vector<vector<Cell*>> board;
 
     void readFile(vector<vector<Cell*>>& board, string filename);
-    SearchBoard() {
 
-    }
     SearchBoard(string filename){
       readFile(this->board, filename);
     }
