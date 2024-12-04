@@ -60,8 +60,12 @@ int main() {
     test.setStyle(sf::Text::Bold);
     setText(test, float(50), float(50));
 
+    string runningString = "";
+    bool right = false; bool down = false;
+    bool click = false;
+    int prevRow = 0; int prevCol = 0;
 
-    // welcome window
+
     sf::RenderWindow window(sf::VideoMode(width, height), "Word Search Solvinator");
     sf::Event event;
     while(window.isOpen()) {
@@ -71,21 +75,45 @@ int main() {
 
             else if (event.type == sf::Event::MouseButtonPressed) {
                 sf::Vector2i mouse = sf::Mouse::getPosition(window);
-                if (start.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
+                if (!game && !choiceMode && start.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
                     choiceMode = true;
                 }
-                if (hash.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
+                if (!game && choiceMode && hash.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
                     choiceMode = false;
                     game = true;
                     hashMode = true;
                     cout << "Gameplay using hash data structure" << endl;
                 }
-                if (trie.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
+                if (!game && choiceMode && trie.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
                     choiceMode = false;
                     trieMode = true;
                     game = true;
                     cout << "Gameplay using trie data structure" << endl;
                 }
+                if (game && (trieMode || hashMode) && !choiceMode) {
+                    for (int i = 0; i < search.rows; i++) {
+                        for (int j = 0; j < search.cols; j++) {
+                            Cell* currCell = search.board[i][j];
+                            if (mouse.x >= currCell->colPos && mouse.x < currCell->colEnd &&
+                            mouse.y >= currCell->rowPos && mouse.y < currCell->rowEnd) {
+                                if(currCell->clicked) {
+                                    currCell->clicked = false;
+                                    currCell->character.setFillColor(sf::Color::Blue);
+                                    runningString.erase();
+                                    cout << "Word: " << runningString << endl;
+                                }
+                                else if (!currCell->clicked) {
+                                    currCell->clicked = true;
+                                    currCell->character.setFillColor(sf::Color::Green);
+                                    runningString += currCell->value;
+                                    cout << "Word: " << runningString << endl;
+                                }
+
+                            }
+                        }
+                    }
+                }
+
             }
 
             window.clear(sf::Color::White);
@@ -102,8 +130,8 @@ int main() {
                 //window.draw(search.board[0][0]->character);
                 for (int i = 0; i < search.rows; i++) {
                     for (int j = 0; j < search.cols; j++) {
-                       //window.draw(test);
-                       window.draw(search.board[i][j]->character); // figure out why no draw
+                       window.draw(search.board[i][j]->outline);
+                       window.draw(search.board[i][j]->character);
                     }
                 }
             }

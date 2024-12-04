@@ -10,7 +10,14 @@ struct Cell {
     char value = ' ';
     //sf::Sprite backgroundColor;
     sf::Font font;
+    sf::RectangleShape outline;
     sf::Text character;
+    int rowPos = 0;
+    int colPos = 0;
+    int rowEnd = 0;
+    int colEnd = 0;
+
+    bool clicked = false;
 
     Cell() {
         value = ' ';
@@ -32,6 +39,10 @@ struct Cell {
         character.setCharacterSize(24);
         character.setFillColor(sf::Color::Blue);
         character.setStyle(sf::Text::Bold);
+        outline.setFillColor(sf::Color::White);
+        outline.setOutlineColor(sf::Color::Red);
+        outline.setOutlineThickness(2);
+
     }
 };
 
@@ -61,6 +72,14 @@ sf::Text setText(sf::Text &text, float x, float y) {
     return text;
 }
 
+sf::RectangleShape setRect(sf::RectangleShape &rect, float x, float y) {
+    sf::FloatRect textRect = rect.getLocalBounds();
+    rect.setOrigin(textRect.left + textRect.width / 2.0f,
+                   textRect.top + textRect.height / 2.0f);
+    rect.setPosition(sf::Vector2f(x, y));
+    return rect;
+}
+
  void SearchBoard::readFile(vector<vector<Cell*>>& board, string filename) {
     ifstream file;
     file.open(filename);
@@ -78,11 +97,18 @@ sf::Text setText(sf::Text &text, float x, float y) {
     this->gridHeight = float((this->height - 200) / this->rows);
 
     int i = 0;
+    int xOrigin = 0; int yOrigin = 0;
     while(getline(file, line)) {
             vector<Cell*> row;
             for (int j = 0; j < this->cols; j++) {
                 Cell *temp = new Cell(line[j]);
                 temp->character = setText(temp->character, j * gridWidth + gridWidth, i * gridHeight + gridHeight);
+                temp->outline.setSize(sf::Vector2f(gridWidth, gridHeight));
+                temp->outline.setOrigin(gridWidth/2, gridHeight/2);
+                xOrigin = j * gridWidth + gridWidth; yOrigin = i * gridHeight + gridHeight;
+                temp->outline.setPosition(xOrigin, yOrigin);
+                temp->rowPos = yOrigin - gridHeight/2; temp->rowEnd = yOrigin + gridHeight/2;
+                temp->colPos = xOrigin - gridWidth/2; temp->colEnd = xOrigin + gridWidth/2;
                 row.push_back(temp);
             }
             board.push_back(row);
