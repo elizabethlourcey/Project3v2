@@ -93,7 +93,6 @@ void TrieTree::buildTrie(std::string bank) {
     string word;
     while (getline(file, word)){
         //insert each word
-        word.erase(remove_if(word.begin(), word.end(), ::isspace), word.end());
         if (!word.empty()) {
             insertWord(word);
         }

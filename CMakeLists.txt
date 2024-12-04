@@ -13,7 +13,8 @@ FetchContent_MakeAvailable(SFML)
 add_executable(Project3v2 main.cpp
         Trie.cpp
         Trie.h
-        Cells.h)
+        Cells.h
+        HashTable.cpp)
 
 target_link_libraries(Project3v2 PRIVATE sfml-graphics)
 target_compile_features(Project3v2 PRIVATE cxx_std_17)

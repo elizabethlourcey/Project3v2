@@ -54,9 +54,14 @@ struct SearchBoard {
     int height = 800;
     float gridWidth = 0;
     float gridHeight = 0;
+    string filePath = " ";
+    string mode = " ";
     vector<vector<Cell*>> board;
-    void readFile(vector<vector<Cell*>>& board, string filename);
 
+    void readFile(vector<vector<Cell*>>& board, string filename);
+    SearchBoard() {
+
+    }
     SearchBoard(string filename){
       readFile(this->board, filename);
     }
