@@ -35,16 +35,12 @@ int power(int base, int exp){
 
 int HashTable::computeKey(string s){
     int key = 0;
-    int BASE = 26;
+    const int BASE = 26;
 
     for(int i = 0; i < s.length(); i++){
         int letter = tolower(s.at(i));
         int alphaIndex = letter - 96;
         key += alphaIndex * power(BASE, i);
-    }
-
-    while(table.find(key) != table.end()){
-        key += 1;
     }
 
     if(key < 0){
@@ -103,7 +99,7 @@ void HashTable::insertWord(string word){
 
 void HashTable::insertAll(){
     ifstream file;
-    file.open("../englishWords.txt");
+    file.open("../holiday_bank");
 
     string word;
     while(getline(file, word)){
@@ -138,6 +134,7 @@ void HashTable::rehashWords(){
         }
     }
 }
+
 bool HashTable::searchWord(string input){
     int key = computeKey(input);
     if(table.find(key) != table.end()){
