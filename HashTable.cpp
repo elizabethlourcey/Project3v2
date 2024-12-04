@@ -43,7 +43,7 @@ int HashTable::computeKey(string s){
         key += alphaIndex * power(BASE, i);
     }
 
-    while(table.count(key) == 1){
+    while(table.find(key) != table.end()){
         key += 1;
     }
 
@@ -138,9 +138,9 @@ void HashTable::rehashWords(){
         }
     }
 }
-
 bool HashTable::searchWord(string input){
-    if(table.count(computeKey(input)) == 1){
+    int key = computeKey(input);
+    if(table.find(key) != table.end()){
         return true;
     }
 
