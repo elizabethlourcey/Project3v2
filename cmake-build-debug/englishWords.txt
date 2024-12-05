@@ -11252,9 +11252,7 @@ ayres
 ayrie
 ayries
 ayrshire
-ays
 aysgarth
-ayu
 ayuntamiento
 ayuntamientos
 ayurveda
@@ -19928,9 +19926,6 @@ bryophytes
 bryozoa
 brython
 brythonic
-bsc
-bst
-btu
 buat
 buats
 buaze
@@ -68013,7 +68008,6 @@ giorgione
 gios
 giotto
 giovanni
-gip
 gippies
 gippo
 gippos
@@ -89110,8 +89104,6 @@ kharifs
 kharkov
 khartoum
 khartum
-khat
-khats
 khaya
 khayas
 khayyam
@@ -193293,7 +193285,6 @@ yucking
 yucks
 yucky
 yuft
-yug
 yuga
 yugas
 yugoslav
