@@ -114,6 +114,8 @@ SearchBoard welcomeWindow() {
                     change.setPosition(width / 2 + 100, height / 2);
 
                 }
+
+                // determining word search theme
                 if (searchMode && !choiceMode && change.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
                     themeidx += 1;
                     if (themeidx == themes.size())
@@ -136,7 +138,9 @@ SearchBoard welcomeWindow() {
                     cout << "Gameplay using trie data structure" << endl;
                 }
 
+                // trie or hash mode
                 if (hashMode || trieMode) {
+                    // board creation
                     SearchBoard search(choiceFilePath);
                     search.filePath = choiceFilePath;
                     if (trieMode)
@@ -192,14 +196,14 @@ void gameWindow(SearchBoard& search) {
 
     TrieTree trie;
     HashTable hash;
-    vector<string> wordBank;
 
+    // load trie
     if (search.mode == "trie") {
         trie.buildTrie("../englishWords.txt");
         cout << "Trie successfully created" << endl;
 
     }
-
+    // load hash
     else if (search.mode == "hash") {
         hash.insertAll();
         cout << "Hash successfully created" << endl;
@@ -224,6 +228,7 @@ void gameWindow(SearchBoard& search) {
 
             else if (event.type == sf::Event::MouseButtonPressed) {
                 sf::Vector2i mouse = sf::Mouse::getPosition(window);
+                // autoSolve -- Solvinator!
                 if (!solvinator && autoSolve.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
                     solvinator = true;
                     currCell = search.board[0][0];
@@ -286,10 +291,12 @@ void gameWindow(SearchBoard& search) {
 
                 }
 
+                // check button for individual word
                 if (!solvinator && check.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
 
                     currCell = search.board[prevRow][prevCol];
 
+                    // if word is found
                     if ((trie.searchWord(runningString) && search.mode == "trie") ||
                         ((hash.searchWord(runningString)) && search.mode == "hash")) {
                         if (search.mode == "trie")
@@ -313,7 +320,11 @@ void gameWindow(SearchBoard& search) {
                         }
                         down = false;
                         right = false;
-                    } else {
+
+
+                    }
+                    // word is not found
+                    else {
                         if (search.mode == "hash") {
                             cout << "Hash" << endl;
                             if (!hash.searchWord(runningString));
@@ -346,7 +357,7 @@ void gameWindow(SearchBoard& search) {
                     runningString = "";
                 }
 
-
+                // check individual cells if clicked for highlighting
                 if (!solvinator) {
                     for (int i = 0; i < search.rows; i++) {
                         for (int j = 0; j < search.cols; j++) {

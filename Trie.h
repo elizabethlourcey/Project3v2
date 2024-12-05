@@ -27,9 +27,6 @@ public:
     bool searchWord(string word);
     Node* getRoot();
     void buildTrie(string bank);
-    vector<string> findWords(string file);
-    vector<string> searchHorizontal(string row);
-    vector<string> searchVertical(vector<string> block, int col);
     ~TrieTree();
 
 
