@@ -196,8 +196,6 @@ void gameWindow(SearchBoard& search) {
 
     if (search.mode == "trie") {
         trie.buildTrie("../englishWords.txt");
-        //wordBank = trie.findWords(search.filePath);
-        //cout << wordBank.size() << endl;
         cout << "Trie successfully created" << endl;
 
     }
@@ -210,7 +208,7 @@ void gameWindow(SearchBoard& search) {
     // game control
     string runningString = "";
     bool right = false; bool down = false;
-    bool click = false;
+    bool solvinator = false;
     int prevRow = 0; int prevCol = 0;
     Cell* currCell;
 
@@ -226,135 +224,146 @@ void gameWindow(SearchBoard& search) {
 
             else if (event.type == sf::Event::MouseButtonPressed) {
                 sf::Vector2i mouse = sf::Mouse::getPosition(window);
-                    if (autoSolve.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
-                        // check all horizontal rows
-                        cout << "Horizontal Search" << endl;
-                        string word = "";
-                        for (int i = 0; i < search.rows; i++) {
-                            for (int j = 0; j < search.cols; j++) {
-                                word = "";
-                                for (int k = j; k < search.cols; k++) {
-                                    word += tolower(search.board[i][k]->value);
-                                    currCell = search.board[i][k];
-                                    if(search.mode == "trie" && trie.searchWord(word)) {
-                                        currCell->found = true;
-                                        prevCol = k;
-                                        currCell->character.setFillColor(sf::Color::Green);
+                if (!solvinator && autoSolve.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
+                    solvinator = true;
+                    currCell = search.board[0][0];
+                    // check all horizontal rows
+                    cout << "Horizontal Search" << endl;
+                    string word = "";
+                    for (int i = 0; i < search.rows; i++) {
+                        for (int j = 0; j < search.cols; j++) {
+                            word = "";
+                            for (int k = j; k < search.cols; k++) {
+                                word += tolower(search.board[i][k]->value);
+                                currCell = search.board[i][k];
+                                if ((trie.searchWord(word) && search.mode == "trie") ||
+                                    ((hash.searchWord(word)) && search.mode == "hash")) {
+                                    currCell->found = true;
+                                    prevCol = k;
+                                    currCell->character.setFillColor(sf::Color::Green);
 
-                                        for (int m = 1; m < word.length(); m++) {
-                                                search.board[i][prevCol - 1]->found = true;
-                                                search.board[i][prevCol - 1]->character.setFillColor(sf::Color::Green);
-                                                prevCol -= 1;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        // check all vertical columns
-                        for (int i = 0; i < search.cols; i++) {
-                           for (int j = 0; j < search.rows; j++) {
-                               word = "";
-                               for (int k = j; k < search.rows; k++) {
-                                   word += tolower(search.board[k][i]->value);
-                                   currCell = search.board[k][i];
-                                   if(search.mode == "trie" && trie.searchWord(word)) {
-                                       //currCell->found = true;
-                                       prevRow = k;
-                                       currCell->character.setFillColor(sf::Color::Green);
-
-                                       for (int m = 1; m < word.length(); m++) {
-                                           //search.board[prevRow - 1][i]->found = true;
-                                           search.board[prevRow - 1][i]->character.setFillColor(sf::Color::Green);
-                                           prevRow -= 1;
-                                       }
-                                   }
-                               }
-
-                           }
-                        }
-                        cout << "Vertical Search" << endl;
-                    }
-                    if (check.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
-
-                        currCell = search.board[prevRow][prevCol];
-
-                            if ((trie.searchWord(runningString) && search.mode == "trie") || ((hash.searchWord(runningString)) && search.mode == "hash")) {
-                                if (search.mode == "trie")
-                                    cout << "Word found in trie" << endl;
-                                else if (search.mode == "hash")
-                                    cout << "Word found in hash table" << endl;
-                                currCell->found = true;
-
-                                currCell->character.setFillColor(sf::Color::Green);
-
-                                for (int i = 1; i < runningString.length(); i++) {
-                                    if (down) {
-                                       search.board[prevRow - 1][prevCol]->found = true;
-                                       search.board[prevRow - 1][prevCol]->character.setFillColor(sf::Color::Green);
-                                       prevRow -= 1;
-                                    }
-                                    else if (right) {
-                                        search.board[prevRow][prevCol - 1]->found = true;
-                                        search.board[prevRow][prevCol - 1]->character.setFillColor(sf::Color::Green);
+                                    for (int m = 1; m < word.length(); m++) {
+                                        search.board[i][prevCol - 1]->found = true;
+                                        search.board[i][prevCol - 1]->character.setFillColor(sf::Color::Green);
                                         prevCol -= 1;
                                     }
                                 }
-                                down = false; right = false;
                             }
-                            else {
-                                if(search.mode == "hash") {
-                                    cout << "Hash" << endl;
-                                    if (!hash.searchWord(runningString));
-                                        cout << "Word not found" << endl;
-                                }
+                        }
+                    }
+                    // check all vertical columns
+                    for (int i = 0; i < search.cols; i++) {
+                        for (int j = 0; j < search.rows; j++) {
+                            word = "";
+                            for (int k = j; k < search.rows; k++) {
+                                word += tolower(search.board[k][i]->value);
+                                currCell = search.board[k][i];
+                                if ((trie.searchWord(word) && search.mode == "trie") ||
+                                    ((hash.searchWord(word)) && search.mode == "hash")) {
+                                    //currCell->found = true;
+                                    prevRow = k;
+                                    currCell->character.setFillColor(sf::Color::Green);
 
-                                if(search.mode == "trie") {
-                                    cout << "Trie" << endl;
-                                    if (!trie.searchWord(runningString))
-                                        cout << "Word not found" << endl;
-                                }
-
-                                currCell->clicked = false;
-                                currCell->character.setFillColor(sf::Color::Blue);
-
-                                for (int i = 1; i < runningString.length(); i++) {
-                                    if (down) {
-                                        search.board[prevRow - 1][prevCol]->clicked = false;
-                                        search.board[prevRow - 1][prevCol]->character.setFillColor(sf::Color::Blue);
+                                    for (int m = 1; m < word.length(); m++) {
+                                        //search.board[prevRow - 1][i]->found = true;
+                                        search.board[prevRow - 1][i]->character.setFillColor(sf::Color::Green);
                                         prevRow -= 1;
                                     }
-                                    else if (right) {
-                                        search.board[prevRow][prevCol - 1]->clicked = false;
-                                        search.board[prevRow][prevCol - 1]->character.setFillColor(sf::Color::Blue);
-                                        prevCol -= 1;
-                                    }
                                 }
                             }
-                                down = false; right = false;
-                                runningString = "";
+
+                        }
                     }
 
+                    // clear any cells that are magenta
+                    for (int i = 0; i < search.rows; i++) {
+                        for (int j = 0; j < search.cols; j++) {
+                            if (!search.board[i][j]->found)
+                                search.board[i][j]->character.setFillColor(sf::Color::Blue);
+                        }
+                    }
+                    cout << "Vertical Search" << endl;
+
+                }
+
+                if (!solvinator && check.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
+
+                    currCell = search.board[prevRow][prevCol];
+
+                    if ((trie.searchWord(runningString) && search.mode == "trie") ||
+                        ((hash.searchWord(runningString)) && search.mode == "hash")) {
+                        if (search.mode == "trie")
+                            cout << "Word found in trie" << endl;
+                        else if (search.mode == "hash")
+                            cout << "Word found in hash table" << endl;
+                        currCell->found = true;
+
+                        currCell->character.setFillColor(sf::Color::Green);
+
+                        for (int i = 1; i < runningString.length(); i++) {
+                            if (down) {
+                                search.board[prevRow - 1][prevCol]->found = true;
+                                search.board[prevRow - 1][prevCol]->character.setFillColor(sf::Color::Green);
+                                prevRow -= 1;
+                            } else if (right) {
+                                search.board[prevRow][prevCol - 1]->found = true;
+                                search.board[prevRow][prevCol - 1]->character.setFillColor(sf::Color::Green);
+                                prevCol -= 1;
+                            }
+                        }
+                        down = false;
+                        right = false;
+                    } else {
+                        if (search.mode == "hash") {
+                            cout << "Hash" << endl;
+                            if (!hash.searchWord(runningString));
+                            cout << "Word not found" << endl;
+                        }
+
+                        if (search.mode == "trie") {
+                            cout << "Trie" << endl;
+                            if (!trie.searchWord(runningString))
+                                cout << "Word not found" << endl;
+                        }
+
+                        currCell->clicked = false;
+                        currCell->character.setFillColor(sf::Color::Blue);
+
+                        for (int i = 1; i < runningString.length(); i++) {
+                            if (down) {
+                                search.board[prevRow - 1][prevCol]->clicked = false;
+                                search.board[prevRow - 1][prevCol]->character.setFillColor(sf::Color::Blue);
+                                prevRow -= 1;
+                            } else if (right) {
+                                search.board[prevRow][prevCol - 1]->clicked = false;
+                                search.board[prevRow][prevCol - 1]->character.setFillColor(sf::Color::Blue);
+                                prevCol -= 1;
+                            }
+                        }
+                    }
+                    down = false;
+                    right = false;
+                    runningString = "";
+                }
 
 
-
-
+                if (!solvinator) {
                     for (int i = 0; i < search.rows; i++) {
                         for (int j = 0; j < search.cols; j++) {
                             currCell = search.board[i][j];
                             if (mouse.x >= currCell->colPos && mouse.x < currCell->colEnd &&
                                 mouse.y >= currCell->rowPos && mouse.y < currCell->rowEnd) {
                                 cout << "click" << endl;
-                                if(currCell->clicked && !currCell->found) {
+                                if (currCell->clicked && !currCell->found) {
                                     if (i == prevRow && j == prevCol) {
                                         currCell->clicked = false;
                                         currCell->character.setFillColor(sf::Color::Blue);
-                                        runningString.erase(runningString.length()-1);
+                                        runningString.erase(runningString.length() - 1);
                                         cout << "Word: " << runningString << endl;
                                         if (down) {
                                             prevRow = i - 1;
                                             prevCol = j;
-                                        }
-                                        else if (right) {
+                                        } else if (right) {
                                             prevRow = i;
                                             prevCol = j - 1;
                                         }
@@ -362,17 +371,18 @@ void gameWindow(SearchBoard& search) {
                                             down = false;
                                             right = false;
                                             if (runningString.length() == 0) {
-                                                prevRow = -1; prevCol = -1;
+                                                prevRow = -1;
+                                                prevCol = -1;
                                             }
 
                                         }
 
                                     }
 
-                                }
-                                else if (!currCell->clicked && !currCell->found) {
-                                    if (((down && i == prevRow + 1 && j == prevCol) || (right && j == prevCol + 1 && i == prevRow)) || runningString.length() == 0
-                                    || runningString.length() == 1) {
+                                } else if (!currCell->clicked && !currCell->found) {
+                                    if (((down && i == prevRow + 1 && j == prevCol) ||
+                                         (right && j == prevCol + 1 && i == prevRow)) || runningString.length() == 0
+                                        || runningString.length() == 1) {
                                         if (runningString.length() == 1) {
                                             if (i == prevRow + 1 && j == prevCol)
                                                 down = true;
@@ -385,17 +395,13 @@ void gameWindow(SearchBoard& search) {
                                         currCell->character.setFillColor(sf::Color::Magenta);
                                         runningString += currCell->value;
                                         cout << "Word: " << runningString << endl;
-                                        prevRow = i; prevCol = j;
-                                    }
-
-
-                                    else {
+                                        prevRow = i;
+                                        prevCol = j;
+                                    } else {
                                         currCell->clicked = false;
                                         continue;
                                     }
-                                }
-
-                                else if (currCell->clicked && currCell->found)
+                                } else if (currCell->clicked && currCell->found)
                                     continue;
 
                                 cout << "Down : " << down << endl;
@@ -407,6 +413,7 @@ void gameWindow(SearchBoard& search) {
                     }
 
 
+                }
             }
         }
         window.clear(sf::Color::White);

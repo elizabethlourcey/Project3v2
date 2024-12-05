@@ -99,7 +99,7 @@ void HashTable::insertWord(string word){
 
 void HashTable::insertAll(){
     ifstream file;
-    file.open("../holiday_bank");
+    file.open("../englishWords.txt");
 
     string word;
     while(getline(file, word)){
