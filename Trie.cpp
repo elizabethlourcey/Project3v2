@@ -102,6 +102,33 @@ void TrieTree::buildTrie(std::string bank) {
 }
 
 
+TrieTree::~TrieTree() {
+    deleteNodes(root);
+}
+
+void TrieTree::deleteNodes(Node* curr) {
+    if (!curr) return;
+    for (int i = 0; i < 26; i++) {
+        deleteNodes(curr->letters[i]);
+    }
+    delete curr;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 vector<string> TrieTree::findWords(std::string file) {
     //find all words in a block of text (horizontal and vertical forward spelling only)
     //open word search file
@@ -179,15 +206,3 @@ vector<string> TrieTree::searchVertical(vector<string> block, int col) {
     return foundWords;
 }
 
-
-TrieTree::~TrieTree() {
-    deleteNodes(root);
-}
-
-void TrieTree::deleteNodes(Node* curr) {
-    if (!curr) return;
-    for (int i = 0; i < 26; i++) {
-        deleteNodes(curr->letters[i]);
-    }
-    delete curr;
-}

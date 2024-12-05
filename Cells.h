@@ -45,6 +45,8 @@ struct Cell {
         outline.setOutlineThickness(2);
 
     }
+
+
 };
 
 
@@ -64,6 +66,14 @@ struct SearchBoard {
     SearchBoard(string filename){
       readFile(this->board, filename);
     }
+
+    /*~SearchBoard() {
+        for (int i = 0; i < this->rows; i++) {
+            for (int j = 0; j < this->cols; j++) {
+                delete this->board[i][j];
+            }
+        }
+    }*/
 
 };
 
