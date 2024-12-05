@@ -205,7 +205,7 @@ void gameWindow(SearchBoard& search) {
     }
     // load hash
     else if (search.mode == "hash") {
-        hash.insertAll();
+        hash.insertAll("../englishWords.txt");
         cout << "Hash successfully created" << endl;
     }
 
@@ -230,7 +230,6 @@ void gameWindow(SearchBoard& search) {
                 sf::Vector2i mouse = sf::Mouse::getPosition(window);
                 // autoSolve -- Solvinator!
                 if (!solvinator && autoSolve.getGlobalBounds().contains(window.mapPixelToCoords(mouse))) {
-                    solvinator = true;
                     currCell = search.board[0][0];
                     // check all horizontal rows
                     cout << "Horizontal Search" << endl;
@@ -265,12 +264,12 @@ void gameWindow(SearchBoard& search) {
                                 currCell = search.board[k][i];
                                 if ((trie.searchWord(word) && search.mode == "trie") ||
                                     ((hash.searchWord(word)) && search.mode == "hash")) {
-                                    //currCell->found = true;
+                                    currCell->found = true;
                                     prevRow = k;
                                     currCell->character.setFillColor(sf::Color::Green);
 
                                     for (int m = 1; m < word.length(); m++) {
-                                        //search.board[prevRow - 1][i]->found = true;
+                                        search.board[prevRow - 1][i]->found = true;
                                         search.board[prevRow - 1][i]->character.setFillColor(sf::Color::Green);
                                         prevRow -= 1;
                                     }
@@ -288,6 +287,7 @@ void gameWindow(SearchBoard& search) {
                         }
                     }
                     cout << "Vertical Search" << endl;
+                    solvinator = true;
 
                 }
 
